@@ -84,7 +84,7 @@ class Caldera_Forms_Admin {
 		add_action("wp_ajax_cf_dismiss_pointer", array( $this, 'update_pointer') );
 		add_action("wp_ajax_cf_bulk_action", array( $this, 'bulk_action') );
 		add_action("wp_ajax_cf_get_form_preview", array( $this, 'get_form_preview') );
-		
+		add_action("wp_ajax_cf_get_config", array( $this, 'get_config') );
 
 		add_action( 'admin_footer', array( $this, 'add_shortcode_inserter'));
 
@@ -163,6 +163,16 @@ class Caldera_Forms_Admin {
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Get general config options
+	 *
+	 * @uses wp_ajax_cf_get_config
+	 */
+	public function get_config(){
+		$config['front_end_styles'] = get_option( '_caldera_forms_styleincludes' );
+		wp_send_json_success( $config );
 	}
 
 	public function get_form_preview(){

@@ -1,3 +1,27 @@
+<script type="text/html" id="config-tmpl">
+	<div data-tab="<?php echo esc_attr( __( 'Frontend', 'caldera-forms' ) ); ?>">
+		<h3 class="settings-header"><?php echo esc_attr( __( 'Styles included on frontend', 'caldera-forms' ) ); ?></h3>
+		<div class="general-settings caldera-config-group">
+			<label for=""><?php echo __('Includes styling for alert notices', 'caldera-forms'); ?></label>
+			<div class="caldera-config-field">
+				<button style="min-width: 100px;" type="button" title="<?php echo __('Includes styling for alert notices', 'caldera-forms'); ?>" data-action="save_cf_setting" data-active-class="none" data-set="alert" data-callback="update_setting_toggle" class="ajax-trigger setting_toggle_alert button {{#if data/front_end_styles/alert}}button-primary{{/if}}"><?php echo __('Alert' , 'caldera-forms'); ?></button>
+			</div>
+		</div>	
+		<div class="general-settings caldera-config-group">
+			<label for=""><?php echo __('Includes styling for fields and buttons', 'caldera-forms'); ?></label>
+			<div class="caldera-config-field">
+				<button style="min-width: 100px;" type="button" title="<?php echo __('Includes styling for fields and buttons', 'caldera-forms'); ?>" data-action="save_cf_setting" data-active-class="none" data-set="form" data-callback="update_setting_toggle" class="ajax-trigger setting_toggle_form button {{#if data/front_end_styles/form}}button-primary{{/if}}"><?php echo __('Form' , 'caldera-forms'); ?></button>
+			</div>
+		</div>	
+		<div class="general-settings caldera-config-group">
+			<label for=""><?php echo __('Includes styling for form grid layouts', 'caldera-forms'); ?></label>
+			<div class="caldera-config-field">
+				<button style="min-width: 100px;" type="button" title="<?php echo __('Includes styling for form grid layouts', 'caldera-forms'); ?>" data-action="save_cf_setting" data-active-class="none" data-set="grid" data-callback="update_setting_toggle" class="ajax-trigger setting_toggle_grid button {{#if data/front_end_styles/grid}}button-primary{{/if}}"><?php echo __('Grid' , 'caldera-forms'); ?></button>
+			</div>
+		</div>	
+
+	</div>
+</script>
 <script type="text/html" id="bulk-actions-active-tmpl">
 	<option selected="selected" value=""><?php echo __('Bulk Actions'); ?></option>
 	<option value="export"><?php echo __('Export Selected'); ?></option>

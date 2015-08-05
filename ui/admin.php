@@ -38,25 +38,15 @@ $modal_new_form = __('Create Form', 'caldera-forms').'|{"data-action" : "create_
 			<a class="button ajax-trigger" data-request="start_new_form" data-modal-buttons='<?php echo $modal_new_form; ?>' data-modal-width="600" data-modal-height="400" data-load-class="none" data-modal="new_form" data-modal-title="<?php echo __('Create New Form', 'caldera-forms'); ?>" data-template="#new-form-tmpl"><?php echo __('New Form', 'caldera-forms'); ?></a>
 		</li>
 		<li class="caldera-forms-toolbar-item">
-			<a class="button ajax-trigger" data-request="start_new_form" data-modal-width="400" data-modal-height="192" data-modal-element="div" data-load-class="none" data-modal="new_form" data-template="#import-form-tmpl" data-modal-title="<?php echo __('Import Form', 'caldera-forms'); ?>" ><?php echo __('Import', 'caldera-forms'); ?></a>
+			<a class="button ajax-trigger" data-request="start_new_form" data-modal-width="400" data-modal-height="194" data-modal-element="div" data-load-class="none" data-modal="new_form" data-template="#import-form-tmpl" data-modal-title="<?php echo __('Import Form', 'caldera-forms'); ?>" ><?php echo __('Import', 'caldera-forms'); ?></a>
+		</li>
+		<li class="caldera-forms-toolbar-separator"></li>
+		<li class="caldera-forms-toolbar-item">
+			<a class="button ajax-trigger" data-action="cf_get_config" data-modal-width="600" data-modal-height="600" data-modal-element="div" data-load-class="spinner" data-modal-buttons="<?php echo esc_attr( __( 'Close Settings', 'caldera-forms') ); ?>|dismiss" data-modal="new_form" data-template="#config-tmpl" data-modal-title="<?php echo __('General Settings', 'caldera-forms'); ?>" ><?php echo __('Settings', 'caldera-forms'); ?></a>
 		</li>
 		<li class="caldera-forms-toolbar-item">
 		&nbsp;&nbsp;
 		</li>
-		<li class="caldera-forms-headtext">
-			<?php echo __('Front-end Style Includes', 'caldera-forms'); ?>
-		</li>
-		<li class="caldera-forms-toolbar-item">
-			<div class="toggle_option_preview">
-				<button type="button" title="<?php echo __('Includes Bootstrap 3 styles on the frontend for form alert notices', 'caldera-forms'); ?>" data-action="save_cf_setting" data-active-class="none" data-set="alert" data-callback="update_setting_toggle" class="ajax-trigger setting_toggle_alert button <?php if(!empty($style_includes['alert'])){ ?>button-primary<?php } ?>"><?php echo __('Alert' , 'caldera-forms'); ?></button>
-				<button type="button" title="<?php echo __('Includes Bootstrap 3 styles on the frontend for form fields and buttons', 'caldera-forms'); ?>" data-action="save_cf_setting" data-active-class="none" data-set="form" data-callback="update_setting_toggle" class="ajax-trigger setting_toggle_form button <?php if(!empty($style_includes['form'])){ ?>button-primary<?php } ?>"><?php echo __('Form' , 'caldera-forms'); ?></button>
-				<button type="button" title="<?php echo __('Includes Bootstrap 3 styles on the frontend for form grid layouts', 'caldera-forms'); ?>" data-action="save_cf_setting" data-active-class="none" data-set="grid" data-callback="update_setting_toggle" class="ajax-trigger setting_toggle_grid button <?php if(!empty($style_includes['grid'])){ ?>button-primary<?php } ?>"><?php echo __('Grid' , 'caldera-forms'); ?></button>
-			</div>
-		</li>
-		<li class="caldera-forms-toolbar-item">
-		&nbsp;
-		</li>
-
 	</ul>
 </div>
 <div class="form-admin-page-wrap">

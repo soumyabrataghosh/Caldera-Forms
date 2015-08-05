@@ -89,6 +89,13 @@
 .caldera-editor-header-nav > li.sub-meta-line {
   padding: 9px;
 }
+.caldera-editor-header-nav > li.caldera-forms-toolbar-separator {
+  background: #f0f0f0 none repeat scroll 0 0;
+  display: inline-block;
+  height: 42px;
+  margin-left: 6px;
+  width: 1px;
+}
 .toggle_option_row {
   margin: 4px 0;
 }
@@ -520,12 +527,25 @@ h3.caldera-editor-field-title {
   margin-left: -340px;
   width: 330px;
 }
+.general-settings.caldera-config-group {
+  margin-left: 240px;
+}
+.general-settings.caldera-config-group > label {
+  margin-left: -240px;
+  width: 228px;
+}
 .caldera-config-group .field-key {
   float: left;
   margin: 1px 0 0 -140px;
   width: 120px;
 }
-
+h3.settings-header {
+  font-size: 1.1em;
+  font-weight: normal;
+  margin: -12px -12px 12px;
+  border-bottom: 1px solid #efefef;
+  padding: 12px;
+}
 .caldera-config-group.caldera-config-group-full > label {
   margin: 0;
 }
