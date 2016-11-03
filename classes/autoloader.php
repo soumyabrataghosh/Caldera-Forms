@@ -73,6 +73,8 @@ class Caldera_Forms_Autoloader {
 
 			if ( is_file( $file ) ) {
 				require_once $file;
+			}else{
+				$x = 1;
 			}
 			
 		}

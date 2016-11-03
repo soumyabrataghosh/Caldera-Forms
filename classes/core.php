@@ -222,8 +222,12 @@ class Caldera_Forms {
 			// check update version
 			$db_version = get_option( 'CF_DB', 0 );
 			$force_update = false;
-			if( is_admin() && isset( $_GET[ 'cal_db_update' ] ) ) { // ensure that admin can only force update
-				$force_update = (bool) wp_verify_nonce( $_GET[ 'cal_db_update' ] );
+			if( is_admin() && isset( $_GET[ 'cal_db_update' ] ) ) {
+				// ensure that admin can only force update
+				if ( current_user_can( self::get_manage_cap( 'admin' ) ) ) {
+					$force_update = (bool) wp_verify_nonce( $_GET[ 'cal_db_update' ] );
+				}
+
 			}
 
 			if( CF_DB > $db_version || $force_update ) {
@@ -235,6 +239,11 @@ class Caldera_Forms {
 				if( $db_version < 4 || $force_update ){
 					self::activate_caldera_forms( true );
 					caldera_forms_write_db_flag( 4 );
+				}
+
+				if( $db_version < 5 || $force_update ){
+					self::activate_caldera_forms( true );
+					caldera_forms_write_db_flag( 5 );
 				}
 
 			}
@@ -340,6 +349,25 @@ class Caldera_Forms {
 			) " . $charset_collate . ";";
 
 			dbDelta( $meta_table );
+
+		}
+
+		//entry transient
+		if ( ! in_array( $wpdb->prefix . 'cf_transient', $alltables ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			$transient_table = "CREATE TABLE `" . $wpdb->prefix . "cf_transient` (
+			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			`process_id` varchar(255) DEFAULT NULL,
+			`form_instance` bigint(20) unsigned NOT NULL DEFAULT '0',
+			`datestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			`expire` smallint unsigned NOT NULL DEFAULT '120',
+			`data` longtext,
+			PRIMARY KEY (`id`),
+			KEY `process_id` (`process_id`(" . $max_index_length . "))
+	
+			) " . $charset_collate . ";";
+
+			dbDelta( $transient_table );
 
 		}
 
