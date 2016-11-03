@@ -42,6 +42,55 @@ class Caldera_Forms_DB_Transient extends Caldera_Forms_DB_Base {
 		)
 	);
 
+
+    /**
+     * Meta fields
+     *
+     * @since 1.4.4
+     *
+     * @var array
+     */
+    protected $meta_fields = array(
+        'event_id'   => array(
+            '%d',
+            'absint',
+        ),
+        'meta_key'   => array(
+            '%s',
+            'strip_tags',
+        ),
+        'meta_value' => array(
+            '%s',
+            'strip_tags',
+        ),
+    );
+
+    /**
+     * Meta keys
+     *
+     * @since 1.4.4
+     *
+     * @var array
+     */
+    protected $meta_keys = array(
+        'error' => array(
+            '%s',
+            'strip_tags',
+        ),
+        'note'  => array(
+            '%s',
+            'strip_tags',
+        ),
+        'fields' => array(
+            '%s',
+            'escape_array',
+        ),
+        'other' => array(
+            '%s',
+            'escape_array'
+        )
+    );
+
 	/**
 	 * Name of primary index
 	 *
@@ -134,13 +183,26 @@ class Caldera_Forms_DB_Transient extends Caldera_Forms_DB_Base {
 	}
 
 	/**
-	 * This was added to prevent saving meta, which would make SQL error, since there is no transient meta data.
-	 *
 	 * @inheritdoc
 	 * @since 1.4.4
 	 */
 	public function get_meta( $id, $key = false ){
-		return null;
+        global $wpdb;
+        $table_name = $this->get_table_name( true );
+        if( is_array( $id ) ) {
+            $sql = "SELECT * FROM $table_name WHERE`$this->index` IN(" . $this->escape_array( $id ) . ")";
+        }else{
+            $sql = $wpdb->prepare( "SELECT * FROM $table_name WHERE `$this->index` = %d", absint( $id ) );
+        }
+
+        $results = $wpdb->get_results( $sql, ARRAY_A );
+
+        if( ! empty( $results ) && is_string( $key ) ){
+            return $this->reduce_meta( $results, $key );
+
+        }
+
+        return $results;
 	}
 
 	/**

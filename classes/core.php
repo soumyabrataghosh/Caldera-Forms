@@ -371,13 +371,29 @@ class Caldera_Forms {
 
 		}
 
+        //entry transient_meta
+        if ( ! in_array( $wpdb->prefix . 'cf_transient_meta', $alltables ) ) {
+            require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+            $transient_table = "CREATE TABLE `" . $wpdb->prefix . "cf_transient_meta` (
+			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			`transient_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+			`error` varchar(255) DEFAULT NULL,
+			`note` varchar(255) DEFAULT NULL,
+			`other` longtext,
+			PRIMARY KEY (`id`),
+			KEY `transient_id` (`process_id`(" . $max_index_length . "))
+			) " . $charset_collate . ";";
+
+            dbDelta( $transient_table );
+
+        }
+
 
 		if( !in_array($wpdb->prefix.'cf_form_entries', $alltables) || !in_array($wpdb->prefix.'cf_form_entry_values', $alltables) ){
 			// create tables
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 			if( !in_array($wpdb->prefix.'cf_form_entries', $alltables) ){
-			
 				$entry_table = "CREATE TABLE `" . $wpdb->prefix . "cf_form_entries` (
 				`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`form_id` varchar(18) NOT NULL DEFAULT '',

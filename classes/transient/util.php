@@ -27,14 +27,21 @@ class Caldera_Forms_Transient_Util{
      *
      * @param string $process_id
      * @param string $form_instance
-     * @param array $data
+     * @param array $data Main form data
+     * @param array $meta Meta data
      * @return Caldera_Forms_Transient_Object
      */
-    public static function factory( $process_id, $form_instance, $data ){
+    public static function factory( $process_id, $form_instance, $data, $meta = array() ){
         $obj = new Caldera_Forms_Transient_Object;
         $obj->process_id = $process_id;
         $obj->form_instance = $form_instance;
         $obj->data_set( $data );
+        if( ! empty( $meta ) ){
+            foreach( $meta as $type => $value ){
+                $obj->meta_get( $type, $value );
+            }
+
+        }
         return $obj;
     }
 
