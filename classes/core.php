@@ -3208,12 +3208,9 @@ class Caldera_Forms {
 		if(isset($_POST['_cf_frm_edt'])){
 			$entry_id = (int) $_POST['_cf_frm_edt'];
 		}
-		// dont get data with ID else update wont work. since it will update the same thing
-		//$data = self::get_submission_data($form, $entry_id);
+
 		$data = self::get_submission_data($form);
-		//dump($data);
-		// requireds
-		// set transient for returns submittions
+
 		if(empty($transdata)){
 			$transdata = array(
 				'transient' 	=> $process_id,

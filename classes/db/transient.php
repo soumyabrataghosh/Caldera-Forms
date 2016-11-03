@@ -69,7 +69,16 @@ class Caldera_Forms_DB_Transient extends Caldera_Forms_DB_Base {
 	 */
 	private static $instance;
 
-	/**
+    /**
+     * Caldera_Forms_DB_Transient constructor.
+     *
+     * @since 1.4.4
+     */
+    protected function __construct(){
+        add_action( Caldera_Forms_Transient_Util::get_cron_action(), array( 'Caldera_Forms_Transient_Util', 'event_callback' ) );
+    }
+
+    /**
 	 * Get instance
 	 *
 	 * @since 1.4.4
@@ -90,12 +99,16 @@ class Caldera_Forms_DB_Transient extends Caldera_Forms_DB_Base {
 	 *
 	 * @since 1.4.4
 	 *
-	 * @param Caldera_Forms_DB_Transient_Object $data
+	 * @param Caldera_Forms_Transient_Object $data
 	 *
 	 * @return bool|int|null
 	 */
-	public function add_transient( Caldera_Forms_DB_Transient_Object $data ){
-		return $this->create( $data->to_array() );
+	public function add_transient( Caldera_Forms_Transient_Object $data ){
+		$id =  $this->create( $data->to_array() );
+        if( 0 < absint( $id ) ){
+            Caldera_Forms_Transient_Util::schedule_delete( $id, $data->expire );
+        }
+        return $id;
 
 	}
 
@@ -106,7 +119,7 @@ class Caldera_Forms_DB_Transient extends Caldera_Forms_DB_Base {
 	 *
 	 * @param string $process_id Process ID
 	 *
-	 * @return Caldera_Forms_DB_Transient_Object
+	 * @return Caldera_Forms_Transient_Object
 	 */
 	public function get_transient( $process_id ){
 		global $wpdb;
@@ -114,7 +127,7 @@ class Caldera_Forms_DB_Transient extends Caldera_Forms_DB_Base {
 		$sql = $wpdb->prepare( "SELECT * FROM $table_name WHERE `process_id` = %s", strip_tags( $process_id ) );
 		$r = $wpdb->get_results( $sql );
 		if( ! empty( $r ) ){
-			$object = new Caldera_Forms_DB_Transient_Object( $r[ key( array_slice( $r, -1, 1, true  ) )] );
+			$object = new Caldera_Forms_Transient_Object( $r[ key( array_slice( $r, -1, 1, true  ) )] );
 			return $object;
 		}
 
@@ -137,8 +150,15 @@ class Caldera_Forms_DB_Transient extends Caldera_Forms_DB_Base {
 	public function get_record( $id ){
 		$found = parent::get_record( $id );
 		if( ! empty( $found ) ){
-			return new Caldera_Forms_DB_Transient_Object( (object) $found );
+			return new Caldera_Forms_Transient_Object( (object) $found );
 		}
 	}
+
+	public function recent(){
+	    global $wpdb;
+        $table_name = $this->get_table_name( false );
+        $r = $wpdb->get_results( "SELECT * FROM $table_name", ARRAY_A );
+        return $r;
+    }
 
 }

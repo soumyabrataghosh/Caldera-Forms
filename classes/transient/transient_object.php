@@ -9,7 +9,7 @@
  * @link
  * @copyright 2016 CalderaWP LLC
  */
-class Caldera_Forms_DB_Transient_Object extends Caldera_Forms_Object {
+class Caldera_Forms_Transient_Object extends Caldera_Forms_Object {
 
 	/** @var  int */
 	protected $id;
@@ -28,6 +28,8 @@ class Caldera_Forms_DB_Transient_Object extends Caldera_Forms_Object {
 
 	/** @var  string */
 	protected $data;
+
+    protected $meta;
 
 	/**
 	 * Set data property
@@ -54,5 +56,12 @@ class Caldera_Forms_DB_Transient_Object extends Caldera_Forms_Object {
 
 		$this->datestamp = $value;
 	}
+
+
+	public function to_array($serialize_arrays = true ){
+        $data = parent::to_array( $serialize_arrays );
+        $data[ 'transient' ] = $data[ 'process_id' ];
+        return $data;
+    }
 
 }
