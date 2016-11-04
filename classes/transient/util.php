@@ -31,7 +31,7 @@ class Caldera_Forms_Transient_Util{
      * @param array $meta Meta data
      * @return Caldera_Forms_Transient_Object
      */
-    public static function factory( $process_id, $form_instance, $data, $meta = array() ){
+    public static function factory( $process_id, $form_instance = 1, $data = array(), $meta = array() ){
         $obj = new Caldera_Forms_Transient_Object;
         $obj->process_id = $process_id;
         $obj->form_instance = $form_instance;

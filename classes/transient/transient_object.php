@@ -104,18 +104,23 @@ class Caldera_Forms_Transient_Object extends Caldera_Forms_Object implements  Ar
      * @since 1.4.4
      *
      * @param string $type Meta type
-     * @return bool|null
+     * @return mixed|null
      */
     public function meta_get( $type ){
-        if( in_array( $type, $this->meta_types() ) ){
+        if( in_array( $type, $this->main_meta_types() ) ){
             if( ! isset( $this->meta[ 'type' ] ) ){
                 return null;
             }else{
                 return $this->meta[ 'type' ];
             }
+        }else{
+            if( isset( $this->meta[ 'other' ][ $type ] ) ){
+                return $this->meta[ 'other' ][ $type ];
+            }else{
+                return null;
+            }
         }
 
-        return false;
 
     }
 
@@ -125,6 +130,18 @@ class Caldera_Forms_Transient_Object extends Caldera_Forms_Object implements  Ar
      */
 	public function to_array($serialize_arrays = true ){
         $data = parent::to_array( $serialize_arrays );
+        foreach ( $data[ 'meta' ] as $meta => $value ){
+            if ( 'other' != $meta ) {
+                $data[$meta] = $value;
+            }else{
+                foreach ( $meta[ 'other' ] as $other => $value ){
+                    $data[ $other ] = $value;
+                }
+
+            }
+
+        }
+
         $data[ 'transient' ] = $data[ 'process_id' ];
         return $data;
     }
@@ -134,9 +151,12 @@ class Caldera_Forms_Transient_Object extends Caldera_Forms_Object implements  Ar
      * @inheritdoc
      */
     public function offsetSet($offset, $value){
-        if (property_exists($this, $offset) && 'meta' != $offset) {
+        if ( property_exists($this, $offset) && 'meta' != $offset) {
             return $this->__set($offset, $value);
-        } elseif (in_array($offset, $this->main_meta_types())) {
+        } elseif( 'edit' == $offset ) {
+            $this->meta[ 'other' ][ 'edit' ] = $value;
+            return true;
+        } elseif(in_array($offset, $this->main_meta_types())) {
             return $this->meta_set($offset, $value);
         } elseif (isset($this->meta['other'][$offset])) {
             return $this->meta['other'][$offset];
@@ -154,6 +174,8 @@ class Caldera_Forms_Transient_Object extends Caldera_Forms_Object implements  Ar
     public function offsetExists($offset) {
         if ( isset( $this->$offset ) || in_array( $offset, $this->main_meta_types() ) || isset( $this->meta[ 'other' ][ $offset ] ) ){
             return true;
+        }elseif ( 'edit' == $offset ){
+            return isset( $this->meta[ 'other' ][ 'edit' ] );
         }else{
             return false;
         }
@@ -167,7 +189,9 @@ class Caldera_Forms_Transient_Object extends Caldera_Forms_Object implements  Ar
         if( in_array( $offset, $this->main_meta_types() ) ){
             unset( $this->meta[ $offset ] );
             return true;
-        }elseif ( isset( $this->meta[ 'other' ][ $offset ] ) ){
+        }elseif ( 'edit' == $offset ){
+            unset( $this->meta[ 'other' ][ 'edit' ] );
+        } elseif( isset( $this->meta[ 'other' ][ $offset ] ) ){
             unset( $this->meta[ 'other' ][ $offset ] );
             return true;
         } elseif( isset( $this->$offset ) ){
@@ -185,7 +209,9 @@ class Caldera_Forms_Transient_Object extends Caldera_Forms_Object implements  Ar
     public function offsetGet($offset) {
         if( property_exists( $this, $offset ) && 'meta' != $offset ){
             return $this->__get( $offset );
-        }elseif ( in_array( $offset, $this->main_meta_types() )  ){
+        }elseif ( 'edit' == $offset){
+            return $this->meta[ 'other' ][ 'edit' ];
+        } elseif ( in_array( $offset, $this->main_meta_types() )  ){
             return $this->meta_get( $offset );
         }elseif( isset( $this->meta[ 'other' ][ $offset ] ) ){
             return $this->meta[ 'other' ][ $offset ];
